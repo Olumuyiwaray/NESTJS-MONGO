@@ -1,32 +1,32 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { User } from "src/schema/user.schema";
-import { CreateUserDto } from "./dto/createUser.dto";
-import { UpdateUserDto } from "./dto/updateUser.dto";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User } from 'src/schema/user.schema';
+import { CreateUserDto } from './dto/createUser.dto';
+import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Injectable()
-export class UserService{
-    constructor(@InjectModel(User.name) private userModel : Model<User>){}  // Model type User   
-       
-    createUser(CreateUserDto: CreateUserDto){
-            const newUser = new this.userModel(CreateUserDto); 
-            return newUser.save();
-        }
+export class UserService {
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {} // Model type User
 
-    getUsers(){
-        return this.userModel.find()
-    }
+  createUser(CreateUserDto: CreateUserDto) {
+    const newUser = new this.userModel(CreateUserDto);
+    return newUser.save();
+  }
 
-    getUserById(id: string){
-        return this.userModel.findById(id)
-    }
+  getUsers() {
+    return this.userModel.find().sort({ createdAt: -1 }); // sort by createdAt in descending order
+  }
 
-    updateIserById(id: string, updateUserDto: UpdateUserDto){
-        return this.userModel.findByIdAndUpdate(id, updateUserDto, {new: true})
-    }
+  getUserById(id: string) {
+    return this.userModel.findById(id);
+  }
 
-    deleteUser(id: string){
-        return this.userModel.findByIdAndDelete(id)
-    }
+  updateIserById(id: string, updateUserDto: UpdateUserDto) {
+    return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
+  }
+
+  deleteUser(id: string) {
+    return this.userModel.findByIdAndDelete(id);
+  }
 }
